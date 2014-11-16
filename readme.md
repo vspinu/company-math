@@ -25,13 +25,13 @@ You can either register each backend globally:
 
 ```lisp
 
-;; add completions of unicode symbols globally 
+;; global activation of the unicode symbol completion 
 (add-to-list 'company-backend 'company-math-symbols-unicode)
 
 
 ```
 
-or locally per each mode:
+or locally per emacs mode:
 
 
 ```lisp
@@ -39,12 +39,10 @@ or locally per each mode:
 ;; local configuration for TeX modes
 (defun my-latex-mode-setup ()
   (setq-local company-backends
-	      (append '(company-math-symbols-latex
-			company-latex-commands)
+	      (append '(company-math-symbols-latex company-latex-commands)
 		      company-backends)))
 
 (add-hook 'TeX-mode-hook 'my-latex-mode-setup)
-
  
 ```
 
