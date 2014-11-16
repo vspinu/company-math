@@ -1,4 +1,4 @@
-This add-on defines three *[company-mode](https://github.com/company-mode)* backends:
+This add-on defines three *[company-mode](http://company-mode.github.io/)* backends:
 
 * `company-math-symbols-latex`	- math latex tags (_by default, active only on latex math faces_)
 
@@ -12,9 +12,9 @@ This add-on defines three *[company-mode](https://github.com/company-mode)* back
 
 ## Usage ##
 
-Start math completion by typing the prefix <kbd>`\`</kbd> key. Select the completion type
-RET. Depending on the context and your configuration of the backends unicode
-symbol or latex \tag will be inserted.
+Start math completion by typing the prefix <kbd>`\`</kbd> key. To select the
+completion type <kbd>RET</kbd>. Depending on the context and your configuration
+unicode symbol or latex tag will be inserted.
 
 ## Activation ##
 
@@ -39,8 +39,8 @@ or locally per emacs mode:
 ;; local configuration for TeX modes
 (defun my-latex-mode-setup ()
   (setq-local company-backends
-	      (append '(company-math-symbols-latex company-latex-commands)
-		      company-backends)))
+              (append '(company-math-symbols-latex company-latex-commands)
+                      company-backends)))
 
 (add-hook 'TeX-mode-hook 'my-latex-mode-setup)
  
@@ -48,12 +48,14 @@ or locally per emacs mode:
 
 ## Customization ##
 
-Set `company-tooltip-align-annotations` to t in order to allin symbols to the right as in the above previews.
+Set `company-tooltip-align-annotations` to t in order to allin symbols to the
+right as in the above previews.
 
-By default unicode symbols (`company-math-math-unicode`) is not activate in
-latex math environments and latex math symbols are not available outside of math
-latex environmnts. You can use the following variables to adjust this behavior
-to your liking: `company-math-disallow-unicode-symbols-in-faces`,
+By default unicode symbols backend (`company-math-symbols-unicode`) is not
+active in latex math environments and latex math symbols
+(`company-math-symbols-latex`) is not available outside of math latex
+environmnts. You can use the following variables to adjust this behavior to your
+liking: `company-math-disallow-unicode-symbols-in-faces`,
 `company-math-allow-unicode-symbols-in-faces`,
 `company-math-disallow-latex-symbols-in-faces`,
 `company-math-allow-latex-symbols-in-faces`.
