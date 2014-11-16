@@ -5,7 +5,7 @@
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
 ;; Version: 1.0
-;; Package-Requires: ((company "0.8.0") (symbols "1.0"))
+;; Package-Requires: ((company "0.8.0") (math-symbol-lists "1.0"))
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -30,7 +30,7 @@
 ;;
 ;;; Code:
 
-(require 'symbols)
+(require 'math-symbol-lists)
 (require 'company)
 
 (defgroup company-math nil
@@ -87,8 +87,8 @@ corresponding unicode symbol."
 
 (defconst company-math--symbols
   (delete-dups
-   (append (company-math--make-candidates symbols-math-basic)
-           (company-math--make-candidates symbols-math-extended)))
+   (append (company-math--make-candidates math-symbol-list-basic)
+           (company-math--make-candidates math-symbol-list-extended)))
   "List of math completion candidates.")
 
 (defun company-math--prefix (allow-faces disallow-faces)
@@ -121,7 +121,7 @@ corresponding unicode symbol."
     (interactive (company-begin-backend 'company-latex-commands))
     (prefix (unless (company-in-string-or-comment)
 	      (company-math--prefix t '())))
-    (candidates (all-completions arg symbols-latex-commands))
+    (candidates (all-completions arg math-symbol-list-latex-commands))
     (sorted t)))
 
 ;;;###autoload
