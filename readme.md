@@ -1,18 +1,18 @@
 This add-on defines three *[company-mode](https://github.com/company-mode)* backends:
 
-  * company-math-symbols-latex	- math latex tags (_by default, active only on latex math faces_)
+* `company-math-symbols-latex`	- math latex tags (_by default, active only on latex math faces_)
 
       ![symbols](https://raw.github.com/vspinu/company-math/master/img/latex-symbols.png)
 
- * company-math-symbols-unicode	- unicode symbols (_by default, active everywhere except math faces_)
+* `company-math-symbols-unicode`	- unicode symbols (_by default, active everywhere except math faces_)
 
-      ![math](https://raw.github.com/vspinu/company-math/master/img/unicode-math.png)
+      ![math](https://raw.github.com/vspinu/company-math/master/img/unicode-symbols.png)
 
- * company-latex-commands 		- latex commands 
+* `company-latex-commands` 		- latex commands 
 
 ## Usage ##
 
-Start math completion by typing the prefix "\" key. Select the completion type
+Start math completion by typing the prefix <kbd>`\`</kbd> key. Select the completion type
 RET. Depending on the context and your configuration of the backends unicode
 symbol or latex \tag will be inserted.
 
@@ -20,7 +20,7 @@ symbol or latex \tag will be inserted.
 
 Install from [MELPA](http://melpa.milkbox.net/) repository.
 
-You can either register each backend globally or locally per each mode.
+You can either register each backend globally:
 
 
 ```lisp
@@ -30,6 +30,9 @@ You can either register each backend globally or locally per each mode.
 
 
 ```
+
+or locally per each mode:
+
 
 ```lisp
 
