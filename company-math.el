@@ -99,7 +99,7 @@ corresponding unicode symbol."
 			   (memq face allow-faces)))))
     (when insertp
       (save-excursion
-	(when (re-search-backward company-math-prefix-regexp (point-at-bol) 'no-error)
+	(when (looking-back company-math-prefix-regexp (point-at-bol))
 	  (match-string 1))))))
 
 (defun company-math--substitute-unicode (symbol)
