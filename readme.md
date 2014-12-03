@@ -26,7 +26,7 @@ You can either register each backend globally:
 ```lisp
 
 ;; global activation of the unicode symbol completion 
-(add-to-list 'company-backend 'company-math-symbols-unicode)
+(add-to-list 'company-backends 'company-math-symbols-unicode)
 
 
 ```
