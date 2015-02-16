@@ -1,6 +1,6 @@
 ;;; company-math.el --- Completion back-ends for for math unicode symbols and latex tags
 ;;
-;; Copyright (C) 2014, Vitalie Spinu
+;; Copyright (C) 2015, Vitalie Spinu
 ;; Author: Vitalie Spinu
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
@@ -32,6 +32,7 @@
 
 (require 'math-symbol-lists)
 (require 'company)
+(require 'cl-lib)
 
 (defgroup company-math nil
   "Completion back-ends for math symbols Unicode symbols and LaTeX tags."
@@ -117,7 +118,7 @@ corresponding unicode symbol."
 (defun company-latex-commands (command &optional arg &rest ignored)
   "Company backend for latex commands."
   (interactive (list 'interactive))
-  (case command
+  (cl-case command
     (interactive (company-begin-backend 'company-latex-commands))
     (prefix (unless (company-in-string-or-comment)
 	      (company-math--prefix t '())))
@@ -128,7 +129,7 @@ corresponding unicode symbol."
 (defun company-math-symbols-latex (command &optional arg &rest ignored)
   "Company backend for LaTeX mathematical symbols."
   (interactive (list 'interactive))
-  (case command
+  (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-latex))
     (prefix (unless (company-in-string-or-comment)
 	      (company-math--prefix company-math-allow-latex-symbols-in-faces
@@ -140,7 +141,7 @@ corresponding unicode symbol."
 (defun company-math-symbols-unicode (command &optional arg &rest ignored)
   "Company backend for LaTeX mathematical symbols."
   (interactive (list 'interactive))
-  (case command
+  (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-unicode))
     (prefix (company-math--prefix company-math-allow-unicode-symbols-in-faces
 				  company-math-disallow-unicode-symbols-in-faces))
