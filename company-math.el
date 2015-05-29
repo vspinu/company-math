@@ -43,21 +43,24 @@
   "Regexp matching the prefix of the company-math symbol.
 First subgroup must match the actual symbol to be used in the
 completion."
-  :group 'company-math)
+  :group 'company-math
+  :type 'string)
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
-Can be t if to allow on all faces except those listed in
+When set to special value t, allow on all faces except those in
 `company-math-disallow-unicode-symbols-in-faces'."
   :group 'company-math
-  :type '(repeat symbol))
+  :type '(choice (const t)
+		 (repeat :tag "Faces" symbol)))
 
 (defcustom company-math-allow-latex-symbols-in-faces '(font-latex-math-face)
   "List of faces to disallow the insertion of latex mathematical symbols.
-Can be t if to allow on all faces except those listed in
+When set to special value t, allow on all faces except those in
 `company-math-disallow-latex-symbols-in-faces'."
   :group 'company-math
-  :type '(repeat symbol))
+  :type '(choice (const t)
+		 (repeat :tag "Faces" symbol)))
 
 (defcustom company-math-disallow-unicode-symbols-in-faces '(font-latex-math-face)
   "List of faces to disallow the insertion of Unicode symbols."
