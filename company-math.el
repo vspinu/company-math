@@ -1,6 +1,6 @@
-;;; company-math.el --- Completion back-ends for for math unicode symbols and latex tags
+;;; company-math.el --- Completion backends for unicode math symbols and latex tags
 ;;
-;; Copyright (C) 2015, Vitalie Spinu
+;; Copyright (C) 2015 Free Software Foundation, Inc.
 ;; Author: Vitalie Spinu
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
@@ -9,7 +9,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; This file is *NOT* part of GNU Emacs.
+;; This file is part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
