@@ -42,7 +42,7 @@ or locally per emacs mode:
               (append '(company-math-symbols-latex company-latex-commands)
                       company-backends)))
 
-(add-hook 'TeX-mode-hook 'my-latex-mode-setup)
+(add-hook 'tex-mode-hook 'my-latex-mode-setup)
  
 ```
 
