@@ -113,6 +113,22 @@ corresponding unicode symbol."
     (when (re-search-backward company-math-prefix-regexp)
       (delete-region (match-beginning 0) pos)
       (insert symbol))))
+      
+      ;Zorgoth's new function
+(defun company-math-manual-substitute-unicode () (interactive)
+  "Substitute preceding latex command with its symbol interactively."
+    (let* ((pos (point))
+	   (inhibit-point-motion-hooks t) ; not sure if/why necessary 
+	    (matchpos (progn              ;^included because in the orig.
+	      (re-search-backward company-math-prefix-regexp)
+	      (match-beginning 1)))
+	   (delpos (match-beginning 0))
+	   (astring (buffer-substring matchpos pos)) ;string to check
+           (bstring (car (member astring company-math--symbols))) ;returns propertized string or nil
+           (symbol (if bstring (nth 1 (text-properties-at 0 bstring)))) )
+      (if symbol ;do nothing if symbol is nil
+	(progn (delete-region delpos pos) (insert symbol))
+        (goto-char pos)) ))
 
 
 ;;; BACKENDS
@@ -149,7 +165,14 @@ corresponding unicode symbol."
     (prefix (company-math--prefix company-math-allow-unicode-symbols-in-faces
 				  company-math-disallow-unicode-symbols-in-faces))
     (annotation (concat " " (get-text-property 0 :symbol arg)))
-    (candidates (all-completions arg company-math--symbols))
+    (candidates
+     (let* ((completions (all-completions arg company-math--symbols)) ;changes start here
+	    (symbol (if (equal arg (car completions))
+			(get-text-property 0 :symbol (pop completions)))) ;pop to check if list has other elts
+	    (newelt (if symbol (if (car completions) ;elt to add to list, nil if list not popped
+			(propertize arg :symbol symbol)
+			(propertize (concat arg "--" symbol) :symbol symbol)))))
+	 (cons newelt completions))) ;changes end here
     (post-completion (company-math--substitute-unicode
 		      (get-text-property 0 :symbol arg)))))
 
