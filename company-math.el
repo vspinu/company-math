@@ -54,7 +54,7 @@ When set to special value t, allow on all faces except those in
   :type '(choice (const t)
 		 (repeat :tag "Faces" symbol)))
 
-(defcustom company-math-allow-latex-symbols-in-faces '(font-latex-math-face)
+(defcustom company-math-allow-latex-symbols-in-faces '(tex-math font-latex-math-face)
   "List of faces to disallow the insertion of latex mathematical symbols.
 When set to special value t, allow on all faces except those in
 `company-math-disallow-latex-symbols-in-faces'."
