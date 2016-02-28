@@ -52,7 +52,7 @@ When set to special value t, allow on all faces except those in
 `company-math-disallow-unicode-symbols-in-faces'."
   :group 'company-math
   :type '(choice (const t)
-		 (repeat :tag "Faces" symbol)))
+                 (repeat :tag "Faces" symbol)))
 
 (defcustom company-math-allow-latex-symbols-in-faces '(tex-math font-latex-math-face)
   "List of faces to disallow the insertion of latex mathematical symbols.
@@ -60,7 +60,7 @@ When set to special value t, allow on all faces except those in
 `company-math-disallow-latex-symbols-in-faces'."
   :group 'company-math
   :type '(choice (const t)
-		 (repeat :tag "Faces" symbol)))
+                 (repeat :tag "Faces" symbol)))
 
 (defcustom company-math-disallow-unicode-symbols-in-faces '(font-latex-math-face)
   "List of faces to disallow the insertion of Unicode symbols."
@@ -83,10 +83,10 @@ corresponding unicode symbol."
   (delq nil
         (mapcar
          #'(lambda (el)
-	     (let* ((tex (substring (nth 1 el) 1))
-		    (ch (and (nth 2 el) (decode-char 'ucs (nth 2 el))))
-		    (symb (and ch (char-to-string ch))))
-	       (propertize tex :symbol symb)))
+             (let* ((tex (substring (nth 1 el) 1))
+                    (ch (and (nth 2 el) (decode-char 'ucs (nth 2 el))))
+                    (symb (and ch (char-to-string ch))))
+               (propertize tex :symbol symb)))
          alist)))
 
 (defconst company-math--symbols
@@ -97,19 +97,19 @@ corresponding unicode symbol."
 
 (defun company-math--prefix (allow-faces disallow-faces)
   (let* ((face (get-text-property (point) 'face))
-	 (face (or (car-safe face) face))
-	 (insertp (and (not (memq face disallow-faces))
-		       (or (eq t allow-faces)
-			   (memq face allow-faces)))))
+         (face (or (car-safe face) face))
+         (insertp (and (not (memq face disallow-faces))
+                       (or (eq t allow-faces)
+                           (memq face allow-faces)))))
     (when insertp
       (save-excursion
-	(when (looking-back company-math-prefix-regexp (point-at-bol))
-	  (match-string 1))))))
+        (when (looking-back company-math-prefix-regexp (point-at-bol))
+          (match-string 1))))))
 
 (defun company-math--substitute-unicode (symbol)
   "Substitute preceding latex command with with SYMBOL."
   (let ((pos (point))
-	(inhibit-point-motion-hooks t))
+        (inhibit-point-motion-hooks t))
     (when (re-search-backward company-math-prefix-regexp)
       (delete-region (match-beginning 0) pos)
       (insert symbol))))
@@ -124,7 +124,7 @@ corresponding unicode symbol."
   (cl-case command
     (interactive (company-begin-backend 'company-latex-commands))
     (prefix (unless (company-in-string-or-comment)
-	      (company-math--prefix t '())))
+              (company-math--prefix t '())))
     (candidates (all-completions arg math-symbol-list-latex-commands))
     (sorted t)))
 
@@ -135,14 +135,19 @@ corresponding unicode symbol."
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-latex))
     (prefix (unless (company-in-string-or-comment)
-	      (company-math--prefix company-math-allow-latex-symbols-in-faces
-				    company-math-disallow-latex-symbols-in-faces)))
+              (company-math--prefix company-math-allow-latex-symbols-in-faces
+                                    company-math-disallow-latex-symbols-in-faces)))
     (annotation (concat " " (get-text-property 0 :symbol arg)))
     (candidates (all-completions arg company-math--symbols))))
 
 ;;;###autoload
 (defun company-math-symbols-unicode (command &optional arg &rest ignored)
-  "Company backend for LaTeX mathematical symbols."
+  "Company backend for insertion of Unicode mathematical symbols.
+See the unicode-math page [1] for a list of fonts that have a
+good support for mathematical symbols.
+
+ [1] http://ftp.snt.utwente.nl/pub/software/tex/help/Catalogue/entries/unicode-math.html
+"
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-unicode))
@@ -155,7 +160,7 @@ corresponding unicode symbol."
                           (concat candidate " "))
                         (all-completions arg company-math--symbols)))
     (post-completion (company-math--substitute-unicode
-		      (get-text-property 0 :symbol arg)))))
+                      (get-text-property 0 :symbol arg)))))
 
 
 (provide 'company-math)
