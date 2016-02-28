@@ -147,9 +147,13 @@ corresponding unicode symbol."
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-unicode))
     (prefix (company-math--prefix company-math-allow-unicode-symbols-in-faces
-				  company-math-disallow-unicode-symbols-in-faces))
+                                  company-math-disallow-unicode-symbols-in-faces))
     (annotation (concat " " (get-text-property 0 :symbol arg)))
-    (candidates (all-completions arg company-math--symbols))
+    ;; Space added to ensure that completions are never typed in full.
+    ;; See https://github.com/company-mode/company-mode/issues/476
+    (candidates (mapcar (lambda (candidate)
+                          (concat candidate " "))
+                        (all-completions arg company-math--symbols)))
     (post-completion (company-math--substitute-unicode
 		      (get-text-property 0 :symbol arg)))))
 
