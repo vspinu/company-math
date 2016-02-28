@@ -23,7 +23,7 @@ Install from [MELPA](http://melpa.milkbox.net/) repository.
 You can either register each backend globally:
 
 
-```lisp
+```elisp
 
 ;; global activation of the unicode symbol completion 
 (add-to-list 'company-backends 'company-math-symbols-unicode)
@@ -34,7 +34,7 @@ You can either register each backend globally:
 or locally per emacs mode:
 
 
-```lisp
+```elisp
 
 ;; local configuration for TeX modes
 (defun my-latex-mode-setup ()
@@ -48,8 +48,8 @@ or locally per emacs mode:
 
 If you are using `AUCTeX` you might need to use `TeX-mode-hook` instead:
 
-```
-(add-hook TeX-mode-hook 'my-latex-mode-setup)
+```elisp
+(add-hook 'TeX-mode-hook 'my-latex-mode-setup)
 ```
 
 ## Customization ##
