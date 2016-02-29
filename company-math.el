@@ -157,10 +157,11 @@ good support for mathematical symbols.
     (annotation (concat " " (get-text-property 0 :symbol arg)))
     ;; Space added to ensure that completions are never typed in full.
     ;; See https://github.com/company-mode/company-mode/issues/476
-    (candidates (mapcar (lambda (candidate)
-                          (when (get-text-property 0 :symbol candidate)
-                            (concat candidate " ")))
-                        (all-completions arg company-math--symbols)))
+    (candidates (delq nil
+                      (mapcar (lambda (candidate)
+                                (when (get-text-property 0 :symbol candidate)
+                                  (concat candidate " ")))
+                              (all-completions arg company-math--symbols))))
     (post-completion (company-math--substitute-unicode
                       (get-text-property 0 :symbol arg)))))
 
