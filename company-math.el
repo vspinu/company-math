@@ -82,18 +82,19 @@ list of LaTeX symbols with text property :symbol being the
 corresponding unicode symbol."
   (delq nil
         (mapcar
-         #'(lambda (el)
-             (let* ((tex (substring (nth 1 el) 1))
-                    (ch (and (nth 2 el) (decode-char 'ucs (nth 2 el))))
-                    (symb (and ch (char-to-string ch))))
-               (propertize tex :symbol symb)))
+         (lambda (el)
+           (let* ((tex (substring (nth 1 el) 1))
+                  (ch (and (nth 2 el) (decode-char 'ucs (nth 2 el))))
+                  (symb (and ch (char-to-string ch))))
+             (propertize tex :symbol symb)))
          alist)))
 
 (defconst company-math--symbols
   (delete-dups
    (append (company-math--make-candidates math-symbol-list-basic)
            (company-math--make-candidates math-symbol-list-extended)))
-  "List of math completion candidates.")
+  "List of math completion candidates.
+This list is used by both LaTeX and Unicode company completion.")
 
 (defun company-math--prefix (allow-faces disallow-faces)
   (let* ((face (get-text-property (point) 'face))
@@ -157,7 +158,8 @@ good support for mathematical symbols.
     ;; Space added to ensure that completions are never typed in full.
     ;; See https://github.com/company-mode/company-mode/issues/476
     (candidates (mapcar (lambda (candidate)
-                          (concat candidate " "))
+                          (when (get-text-property 0 :symbol candidate)
+                            (concat candidate " ")))
                         (all-completions arg company-math--symbols)))
     (post-completion (company-math--substitute-unicode
                       (get-text-property 0 :symbol arg)))))

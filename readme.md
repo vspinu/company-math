@@ -28,7 +28,6 @@ You can either register each backend globally:
 ;; global activation of the unicode symbol completion 
 (add-to-list 'company-backends 'company-math-symbols-unicode)
 
-
 ```
 
 or locally per emacs mode:
