@@ -56,8 +56,8 @@ It will also work after `company-math-symbol-prefix'."
   :group 'company-math
   :type 'string)
 
-;; no more custom since since v.1.3
-(when (boundp 'company-math-symbol-prefix)
+;; no more custom since since v.1.2
+(when (boundp 'company-math-prefix-regexp)
   (warn "`company-math-prefix-regexp' is deprecated, please remove from your custom settings."))
 
 (defvar company-math--latex-prefix-regexp (concat (regexp-quote company-math-symbol-prefix)
