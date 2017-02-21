@@ -65,7 +65,7 @@ It will also work after `company-math-symbol-prefix'."
 (let ((psym (regexp-quote company-math-symbol-prefix))
       (psub (regexp-quote company-math-subscript-prefix))
       (psup (regexp-quote company-math-superscript-prefix)))
-  (setq company-math--unicode-prefix-regexp (concat "\\(" psym "\\|" psub "\\|" psup "\\)[^ \t\n]+")))
+  (defvar company-math--unicode-prefix-regexp (concat "\\(" psym "\\|" psub "\\|" psup "\\)[^ \t\n]*")))
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
