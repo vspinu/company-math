@@ -4,8 +4,8 @@
 ;; Author: Vitalie Spinu
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
-;; Version: 1.1
-;; Package-Requires: ((company "0.8.0") (math-symbol-lists "1.0"))
+;; Version: 1.2
+;; Package-Requires: ((company "0.8.0") (math-symbol-lists "1.2"))
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -45,12 +45,14 @@
   :type 'string)
 
 (defcustom company-math-subscript-prefix "_"
-  "Prefix to use for unicode subscripts."
+  "Prefix to use for unicode subscripts.
+It will also work after `company-math-symbol-prefix'."
   :group 'company-math
   :type 'string)
 
 (defcustom company-math-superscript-prefix "^"
-  "Prefix to use for unicode subscripts."
+  "Prefix to use for unicode subscripts.
+It will also work after `company-math-symbol-prefix'."
   :group 'company-math
   :type 'string)
 
