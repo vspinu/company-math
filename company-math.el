@@ -45,18 +45,24 @@
   :type 'string)
 
 (defcustom company-math-subscript-prefix "__"
-  "Prefix to use for unicode subscripts.
-It will also work after `company-math-symbol-prefix'.
-This variable will take effect in a new Emacs session."
+  "Prefix for unicode subscripts.
+When nil, no custom prefix is active. Irrespective of the value
+of this variable, prefix composed of `company-math-symbol-prefix'
+and \"_\" is always active (\"\\_\").  This variable takes effect
+in a new Emacs session."
   :group 'company-math
-  :type 'string)
+  :type '(choice (const :tag "No Custom Prefix" nil)
+                 string))
 
 (defcustom company-math-superscript-prefix "^^"
-  "Prefix to use for unicode subscripts.
-It will also work after `company-math-symbol-prefix'.
-This variable will take effect in a new Emacs session."
+  "Prefix for unicode superscripts.
+When nil, no custom prefix is active. Irrespective of the value
+of this variable, prefix composed of `company-math-symbol-prefix'
+and \"^\" is always active (\"\\^\").  This variable takes effect
+in a new Emacs session."
   :group 'company-math
-  :type 'string)
+  :type '(choice (const :tag "No Custom Prefix" nil)
+                 string))
 
 ;; no more custom since since v.1.2
 (when (boundp 'company-math-prefix-regexp)
@@ -67,10 +73,12 @@ This variable will take effect in a new Emacs session."
           "[^ \t\n]+"))
 
 (let ((psym (regexp-quote company-math-symbol-prefix))
-      (psub (regexp-quote company-math-subscript-prefix))
-      (psup (regexp-quote company-math-superscript-prefix)))
-  (defvar company-math--unicode-prefix-regexp
-    (concat "\\(" psym "\\|" psub "\\|" psup "\\)[^ \t\n]*")))
+      (psub (when company-math-symbol-prefix
+              (concat "\\|" (regexp-quote company-math-subscript-prefix))))
+      (psup (when company-math-superscript-prefix
+              (concat "\\|" (regexp-quote company-math-superscript-prefix)))))
+  (setq company-math--unicode-prefix-regexp
+    (concat "\\(" psym psub psup "\\)[^ \t\n]*")))
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
@@ -127,9 +135,11 @@ property :symbol being the corresponding unicode symbol."
 
 (defconst company-math--unicode
   (append
-   (append (company-math--make-candidates math-symbol-list-subscripts company-math-subscript-prefix)
+   (append (when company-math-subscript-prefix
+             (company-math--make-candidates math-symbol-list-subscripts company-math-subscript-prefix))
            (company-math--make-candidates math-symbol-list-subscripts (concat company-math-symbol-prefix "_"))
-           (company-math--make-candidates math-symbol-list-superscripts company-math-superscript-prefix)
+           (when company-math-superscript-prefix
+             (company-math--make-candidates math-symbol-list-superscripts company-math-superscript-prefix))
            (company-math--make-candidates math-symbol-list-superscripts (concat company-math-symbol-prefix "^")))
    company-math--symbols)
   "List of math completion candidates for unicode backend.")
