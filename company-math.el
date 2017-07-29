@@ -44,15 +44,17 @@
   :group 'company-math
   :type 'string)
 
-(defcustom company-math-subscript-prefix "_"
+(defcustom company-math-subscript-prefix "__"
   "Prefix to use for unicode subscripts.
-It will also work after `company-math-symbol-prefix'."
+It will also work after `company-math-symbol-prefix'.
+This variable will take effect in a new Emacs session."
   :group 'company-math
   :type 'string)
 
-(defcustom company-math-superscript-prefix "^"
+(defcustom company-math-superscript-prefix "^^"
   "Prefix to use for unicode subscripts.
-It will also work after `company-math-symbol-prefix'."
+It will also work after `company-math-symbol-prefix'.
+This variable will take effect in a new Emacs session."
   :group 'company-math
   :type 'string)
 
@@ -60,12 +62,15 @@ It will also work after `company-math-symbol-prefix'."
 (when (boundp 'company-math-prefix-regexp)
   (warn "`company-math-prefix-regexp' is deprecated, please remove from your custom settings."))
 
-(defvar company-math--latex-prefix-regexp (concat (regexp-quote company-math-symbol-prefix)
-                                                  "[^ \t\n]+"))
+(defvar company-math--latex-prefix-regexp
+  (concat (regexp-quote company-math-symbol-prefix)
+          "[^ \t\n]+"))
+
 (let ((psym (regexp-quote company-math-symbol-prefix))
       (psub (regexp-quote company-math-subscript-prefix))
       (psup (regexp-quote company-math-superscript-prefix)))
-  (defvar company-math--unicode-prefix-regexp (concat "\\(" psym "\\|" psub "\\|" psup "\\)[^ \t\n]*")))
+  (defvar company-math--unicode-prefix-regexp
+    (concat "\\(" psym "\\|" psub "\\|" psup "\\)[^ \t\n]*")))
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
@@ -97,10 +102,10 @@ When set to special value t, allow on all faces except those in
 ;;; INTERNALS
 
 (defun company-math--make-candidates (alist prefix)
-  "Build a list of math symbols ready to be used in ac source.
-ALIST is one of the defined alist in package `symbols'. Return a
-list of LaTeX symbols with text property :symbol being the
-corresponding unicode symbol."
+  "Build a list of math symbols ready to be used in a company backend.
+ALIST is one of the defined alist in package
+`math-symbol-lists'. Return a list of LaTeX symbols with text
+property :symbol being the corresponding unicode symbol."
   (delq nil
         (mapcar
          (lambda (el)
@@ -123,11 +128,9 @@ corresponding unicode symbol."
 (defconst company-math--unicode
   (append
    (append (company-math--make-candidates math-symbol-list-subscripts company-math-subscript-prefix)
-           (company-math--make-candidates math-symbol-list-subscripts (concat company-math-symbol-prefix
-                                                                              company-math-subscript-prefix))
+           (company-math--make-candidates math-symbol-list-subscripts (concat company-math-symbol-prefix "_"))
            (company-math--make-candidates math-symbol-list-superscripts company-math-superscript-prefix)
-           (company-math--make-candidates math-symbol-list-superscripts (concat company-math-symbol-prefix
-                                                                                company-math-superscript-prefix)))
+           (company-math--make-candidates math-symbol-list-superscripts (concat company-math-symbol-prefix "^")))
    company-math--symbols)
   "List of math completion candidates for unicode backend.")
 
