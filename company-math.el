@@ -139,8 +139,12 @@ corresponding unicode symbol."
                            (memq face allow-faces)))))
     (when insertp
       (save-excursion
-        (when (looking-back regexp (point-at-bol) 'greedy)
-          (match-string 0))))))
+        (let* ((ppss (syntax-ppss))
+               (min-point (if (nth 3 ppss)
+                              (max (nth 8 ppss) (point-at-bol))
+                            (point-at-bol))))
+          (when (looking-back regexp min-point 'greedy)
+            (match-string 0)))))))
 
 (defun company-math--substitute-unicode (symbol)
   "Substitute preceding latex command with with SYMBOL."
