@@ -1,7 +1,7 @@
 ;;; company-math.el --- Completion backends for unicode math symbols and latex tags
 ;;
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
-;; Author: Vitalie Spinu
+;; Author: Vitalie Spinu <spinuvit@gmail.com>
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
 ;; Version: 1.3
@@ -28,6 +28,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;;; Commentary:
+;;
 ;;; Code:
 
 (require 'math-symbol-lists)
@@ -46,7 +48,7 @@
 
 (defcustom company-math-subscript-prefix "__"
   "Prefix for unicode subscripts.
-When nil, no custom prefix is active. Irrespective of the value
+When nil, no custom prefix is active.  Irrespective of the value
 of this variable, prefix composed of `company-math-symbol-prefix'
 and \"_\" is always active (\"\\_\").  This variable takes effect
 in a new Emacs session."
@@ -56,7 +58,7 @@ in a new Emacs session."
 
 (defcustom company-math-superscript-prefix "^^"
   "Prefix for unicode superscripts.
-When nil, no custom prefix is active. Irrespective of the value
+When nil, no custom prefix is active.  Irrespective of the value
 of this variable, prefix composed of `company-math-symbol-prefix'
 and \"^\" is always active (\"\\^\").  This variable takes effect
 in a new Emacs session."
@@ -111,9 +113,10 @@ When set to special value t, allow on all faces except those in
 
 (defun company-math--make-candidates (alist prefix)
   "Build a list of math symbols ready to be used in a company backend.
-ALIST is one of the defined alist in package
-`math-symbol-lists'. Return a list of LaTeX symbols with text
-property :symbol being the corresponding unicode symbol."
+ALIST is one of the defined alist in package `math-symbol-lists'.
+PREFIX is a string to be prefixed to each symbol.  Return a list
+of LaTeX symbols with text property :symbol being the
+corresponding unicode symbol."
   (delq nil
         (mapcar
          (lambda (el)
@@ -145,6 +148,9 @@ property :symbol being the corresponding unicode symbol."
   "List of math completion candidates for unicode backend.")
 
 (defun company-math--prefix (regexp allow-faces disallow-faces)
+  "Response to company prefix command.
+REGEXP is the regexp, ALLOW-FACES and DISALLOW-FACES are list of
+various faces to allow or disallow completion on."
   (let* ((face (get-text-property (point) 'face))
          (face (or (car-safe face) face))
          (insertp (and (not (memq face disallow-faces))
@@ -177,8 +183,9 @@ property :symbol being the corresponding unicode symbol."
 ;;; BACKENDS
 
 ;;;###autoload
-(defun company-latex-commands (command &optional arg &rest ignored)
-  "Company backend for latex commands."
+(defun company-latex-commands (command &optional arg &rest _ignored)
+  "Company backend for latex commands.
+COMMAND and ARG is as required by company backends."
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-latex-commands))
@@ -188,8 +195,9 @@ property :symbol being the corresponding unicode symbol."
     (sorted t)))
 
 ;;;###autoload
-(defun company-math-symbols-latex (command &optional arg &rest ignored)
-  "Company backend for LaTeX mathematical symbols."
+(defun company-math-symbols-latex (command &optional arg &rest _ignored)
+  "Company backend for LaTeX mathematical symbols.
+COMMAND and ARG is as required by company backends."
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-latex))
@@ -201,16 +209,16 @@ property :symbol being the corresponding unicode symbol."
     (candidates (all-completions arg company-math--symbols))))
 
 ;;;###autoload
-(defun company-math-symbols-unicode (command &optional arg &rest ignored)
+(defun company-math-symbols-unicode (command &optional arg &rest _ignored)
   "Company backend for insertion of Unicode mathematical symbols.
+COMMAND and ARG is as required by company backends.
 See the unicode-math page [1] for a list of fonts that have a
 good support for mathematical symbols. Unicode provides only a
 limited range of sub(super)scripts; see the wikipedia page [2]
 for details.
 
  [1] http://ftp.snt.utwente.nl/pub/software/tex/help/Catalogue/entries/unicode-math.html
- [2] https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
-"
+ [2] https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts"
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-unicode))
