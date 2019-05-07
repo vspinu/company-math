@@ -1,6 +1,6 @@
-;;; company-math.el --- Completion backends for unicode math symbols and latex tags
+;;; company-math.el --- Completion backends for unicode math symbols and latex tags -*- lexical-binding: t -*-
 ;;
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2019 Free Software Foundation, Inc.
 ;; Author: Vitalie Spinu <spinuvit@gmail.com>
 ;; URL: https://github.com/vspinu/company-math
 ;; Keywords:  Unicode, symbols, completion
@@ -22,9 +22,7 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
-;; Floor, Boston, MA 02110-1301, USA.
+;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -80,7 +78,7 @@ in a new Emacs session."
       (psup (when company-math-superscript-prefix
               (concat "\\|" (regexp-quote company-math-superscript-prefix)))))
   (setq company-math--unicode-prefix-regexp
-    (concat "\\(" psym psub psup "\\)[^ \t\n]*")))
+        (concat "\\(" psym psub psup "\\)[^ \t\n]*")))
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
