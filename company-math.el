@@ -64,21 +64,15 @@ in a new Emacs session."
   :type '(choice (const :tag "No Custom Prefix" nil)
                  string))
 
-;; no more custom since since v.1.2
-(when (boundp 'company-math-prefix-regexp)
-  (warn "`company-math-prefix-regexp' is deprecated, please remove from your custom settings."))
-
-(defvar company-math--latex-prefix-regexp
-  (concat (regexp-quote company-math-symbol-prefix)
-          "[^ \t\n]+"))
-
-(let ((psym (regexp-quote company-math-symbol-prefix))
-      (psub (when company-math-symbol-prefix
-              (concat "\\|" (regexp-quote company-math-subscript-prefix))))
-      (psup (when company-math-superscript-prefix
-              (concat "\\|" (regexp-quote company-math-superscript-prefix)))))
-  (setq company-math--unicode-prefix-regexp
-        (concat "\\(" psym psub psup "\\)[^ \t\n]*")))
+(defvar company-math--symbol-prefix-regex
+  (regexp-quote company-math-symbol-prefix))
+(defvar company-math--unicode-prefix-regex
+  (let ((psym (regexp-quote company-math-symbol-prefix))
+        (psub (when company-math-symbol-prefix
+                (concat "\\|" (regexp-quote company-math-subscript-prefix))))
+        (psup (when company-math-superscript-prefix
+                (concat "\\|" (regexp-quote company-math-superscript-prefix)))))
+    (concat "\\(" psym psub psup "\\)")))
 
 (defcustom company-math-allow-unicode-symbols-in-faces t
   "List of faces to allow the insertion of Unicode symbols.
@@ -159,15 +153,21 @@ various faces to allow or disallow completion on."
         (let* ((ppss (syntax-ppss))
                (min-point (if (nth 3 ppss)
                               (max (nth 8 ppss) (point-at-bol))
-                            (point-at-bol))))
-          (when (looking-back regexp min-point 'greedy)
-            (match-string 0)))))))
+                            (point-at-bol)))
+               (bounds (bounds-of-thing-at-point 'symbol)))
+          (save-match-data
+            (when (and bounds
+                       (save-excursion
+                         (goto-char (car bounds))
+                         (or (looking-at regexp) ;; symbol might contain prefix (like in org)
+                             (looking-back regexp min-point 'greedy))))
+              (buffer-substring-no-properties (match-beginning 0) (point)))))))))
 
 (defun company-math--substitute-unicode (symbol)
   "Substitute preceding latex command with with SYMBOL."
   (let ((pos (point))
         (inhibit-point-motion-hooks t))
-    (when (re-search-backward company-math--unicode-prefix-regexp) ; should always match
+    (when (re-search-backward (concat company-math--unicode-prefix-regex "[^ \t\n]*")) ; should always match
       (goto-char (match-beginning 0))
       ;; allow subsups to start with \
       (let ((start (max (point-min) (- (point) (length company-math-symbol-prefix)))))
@@ -188,7 +188,7 @@ COMMAND and ARG is as required by company backends."
   (cl-case command
     (interactive (company-begin-backend 'company-latex-commands))
     (prefix (unless (company-in-string-or-comment)
-              (company-math--prefix company-math--latex-prefix-regexp t '())))
+              (company-math--prefix company-math--symbol-prefix-regex t '())))
     (candidates (all-completions arg company-math--latex-commands))
     (sorted t)))
 
@@ -200,7 +200,7 @@ COMMAND and ARG is as required by company backends."
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-latex))
     (prefix (unless (company-in-string-or-comment)
-              (company-math--prefix company-math--latex-prefix-regexp
+              (company-math--prefix company-math--symbol-prefix-regex
                                     company-math-allow-latex-symbols-in-faces
                                     company-math-disallow-latex-symbols-in-faces)))
     (annotation (concat " " (get-text-property 0 :symbol arg)))
@@ -220,7 +220,7 @@ for details.
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-math-symbols-unicode))
-    (prefix (company-math--prefix company-math--unicode-prefix-regexp
+    (prefix (company-math--prefix company-math--unicode-prefix-regex
                                   company-math-allow-unicode-symbols-in-faces
                                   company-math-disallow-unicode-symbols-in-faces))
     (annotation (concat " " (get-text-property 0 :symbol arg)))
